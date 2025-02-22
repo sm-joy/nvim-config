@@ -12,46 +12,75 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     os.exit(1)
   end
 end
+
 vim.opt.rtp:prepend(lazypath)
 
-vim.g.maplocalleader = "\\"
 
 local plugins = {
-	{ 
+	{
 		"nvim-telescope/telescope.nvim",
-		dependencies = { {'nvim-lua/plenary.nvim'} }
+		dependencies = {
+            { "nvim-lua/plenary.nvim" }
+        },
+        lazy = true,
+        cmd = "Telescope"
 	},
 	{
-		"nvim-treesitter/nvim-treesitter", 
-		build = ":TSUpdate"
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
+        lazy = true,
+        event = "BufReadPost"
 	},
-	"vim-airline/vim-airline",
-	"windwp/nvim-autopairs",
-	"stevearc/aerial.nvim",
+	{ "hrsh7th/nvim-cmp" },
+	{ "L3MON4D3/LuaSnip" },
+	{ "hrsh7th/cmp-nvim-lsp" },
 	{
-		"catppuccin/nvim", 
+        "neovim/nvim-lspconfig",
+        lazy = true,
+        event = "BufReadPre",
+    },
+	{
+        "williamboman/mason-lspconfig.nvim",
+        lazy = true,
+        event = "BufReadPre",
+    },
+	{ "preservim/nerdtree" },
+	{
+		"catppuccin/nvim",
 		name = "catppuccin"
 	},
-	"rebelot/kanagawa.nvim",
-	"preservim/nerdtree",
-	"ryanoasis/vim-devicons",
-	"tiagofumo/vim-nerdtree-syntax-highlight",
-	"williamboman/mason.nvim",
-	"williamboman/mason-lspconfig.nvim",
-	"neovim/nvim-lspconfig",
-	"hrsh7th/nvim-cmp",
-	"hrsh7th/cmp-nvim-lsp",
-	"L3MON4D3/LuaSnip",
-	"saadparwaiz1/cmp_luasnip",
-	"tpope/vim-commentary",
-	"matze/vim-move"
+	{ "matze/vim-move" },
+	{ "stevearc/aerial.nvim" },
+	{ "tpope/vim-commentary" },
+	{ "windwp/nvim-autopairs" },
+	{ "rebelot/kanagawa.nvim" },
+	{ "ryanoasis/vim-devicons" },
+	{ "vim-airline/vim-airline" },
+	{
+        "williamboman/mason.nvim",
+        cmd = { "Mason", "MasonInstall" }
+    },
+	{ "saadparwaiz1/cmp_luasnip" },
+	{ "tiagofumo/vim-nerdtree-syntax-highlight" },
 }
 
 
-require("lazy").setup(
-    plugins,
-    {
-	install = { colorscheme = { "habamax" } },
-	checker = { enabled = true },
-    }
-)
+require("lazy").setup(plugins,
+{
+    install = { colorscheme = { "habamax" } },
+    checker = { enabled = true },
+    performance = {
+        rtp = {
+            disabled_plugins = {
+                "gzip",
+                "matchit",
+                "matchparen",
+                "netrwPlugin",
+                "tarPlugin",
+                "tohtml",
+                "tutor",
+                "zipPlugin",
+            },
+        },
+    },
+})

@@ -76,34 +76,25 @@ require("lspconfig").clangd.setup {
 require("lspconfig").cmake.setup {}
 require("lspconfig").pylsp.setup {}
 
-local warning_error_text = false
+
+vim.diagnostic.config({
+    virtual_text = false,
+    signs = true,
+    underline = true,
+    update_in_insert = false,
+    severity_sort = true
+})
+
+local warning_error_text_off = true
 
 function ToggleWarningError()
-    warning_error_text = not warning_error_text
-    if warning_error_text then
-        vim.diagnostic.config({
-            virtual_text = false,
-            signs = true,
-            underline = true,
-            update_in_insert = false,
-            severity_sort = true
-        })
-    else
-        vim.diagnostic.config({
-            virtual_text = true,
-            signs = true,
-            underline = true,
-            update_in_insert = false,
-            severity_sort = true
-        })
-    end
+    warning_error_text_off = not warning_error_text_off
+    vim.diagnostic.config({ virtual_text = not warning_error_text_off })
 end
-
-
 vim.api.nvim_set_keymap('n', '<leader>w', ':lua ToggleWarningError()<CR>', { noremap = true, silent = true })
 
 
-require('aerial').setup({
+require("aerial").setup({
     backends = { "treesitter", "lsp" },
     layout = {
         default_direction = "right",
