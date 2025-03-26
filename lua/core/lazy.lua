@@ -68,7 +68,7 @@ local plugins = {
 require("lazy").setup(plugins,
 {
     install = { colorscheme = { "habamax" } },
-    checker = { enabled = true },
+    checker = { enabled = true, notify = false },
     performance = {
         rtp = {
             disabled_plugins = {

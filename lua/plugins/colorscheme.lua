@@ -5,8 +5,7 @@ require("catppuccin").setup {
     flavor = "frappe",
     color_overrides = {
         all = { text = "#ffffff" },
-        frappe = { 
-                    
+        frappe = {
         },
     }
 }
