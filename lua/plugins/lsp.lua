@@ -1,104 +1,62 @@
-require("mason").setup()
-require("mason-lspconfig").setup({
-    ensure_installed = { "lua_ls", "clangd", "cmake", "pylsp" },
-})
-
-
-vim.api.nvim_create_autocmd('LspAttach', {
-  desc = 'LSP actions',
-  callback = function(event)
-    local opts = {buffer = event.buf}
-
-    vim.keymap.set('n', 'K',    '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-    vim.keymap.set('n', 'gd',   '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-    vim.keymap.set('n', 'gD',   '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-    vim.keymap.set('n', 'gi',   '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-    vim.keymap.set('n', 'go',   '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-    vim.keymap.set('n', 'gr',   '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-    vim.keymap.set('n', 'gs',   '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-    vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-    vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-    vim.keymap.set({'n', 'x'},  '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-  end,
-})
-
-local cmp = require('cmp')
-cmp.setup({
-    sources = {
-        {name = 'nvim_lsp'},
-        { name = 'buffer' },
-        { name = 'path' },
-        { name = 'luasnip' }
+return {
+    "neovim/nvim-lspconfig",
+    event = "BufReadPre",
+    dependencies = { 
+        "williamboman/mason-lspconfig.nvim",
+        "hrsh7th/cmp-nvim-lsp",
     },
-    snippet = {
-        expand = function(args)
-            vim.snippet.expand(args.body)
-        end,
-    },
-    mapping = cmp.mapping.preset.insert({
-        ['<C-n>'] = cmp.mapping.select_next_item(),      -- Move to next suggestion
-        ['<C-p>'] = cmp.mapping.select_prev_item(),      -- Move to previous suggestion
-        ['<C-d>'] = cmp.mapping.scroll_docs(4),           -- Scroll documentation down
-        ['<C-u>'] = cmp.mapping.scroll_docs(-4),          -- Scroll documentation up
-        ['<C-Space>'] = cmp.mapping.complete(),           -- Trigger completion
-        ['<Tab>'] = cmp.mapping.confirm({ select = true })
-    }),
-    completion = {
-        autocomplete = { require("cmp.types").cmp.TriggerEvent.TextChanged },
-        completeopt = "menu,menuone,noinsert",
-    },
-})
+    config = function ()
+        require("mason-lspconfig").setup({
+            ensure_installed = { "lua_ls", "clangd", "cmake", "pylsp" },
+        })
 
+        
+        vim.api.nvim_create_autocmd('LspAttach', {
+            desc = 'LSP actions',
+            callback = function(event)
+                local opts = {buffer = event.buf}
 
+                vim.keymap.set('n', 'K',    vim.lsp.buf.hover, opts)
+                vim.keymap.set('n', 'gd',   vim.lsp.buf.definition, opts)
+                vim.keymap.set('n', 'gD',   vim.lsp.buf.declaration, opts)
+                vim.keymap.set('n', 'gi',   vim.lsp.buf.implementation, opts)
+                vim.keymap.set('n', 'go',   vim.lsp.buf.type_definition, opts)
+                vim.keymap.set('n', 'gr',   vim.lsp.buf.references, opts)
+                vim.keymap.set('n', 'gs',   vim.lsp.buf.signature_help, opts)
+                vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, opts)
+                vim.keymap.set('n', '<F4>', vim.lsp.buf.code_action, opts)
+                vim.keymap.set({'n', 'x'},  '<F3>', function() vim.lsp.buf.format({async = true}) end, opts)
+            end
+        })
 
-local lspconfig_defaults = require('lspconfig').util.default_config
-lspconfig_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lspconfig_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
-)
+        local capabilities = vim.tbl_deep_extend(
+            "force",
+            {},
+            vim.lsp.protocol.make_client_capabilities(),
+            require("cmp_nvim_lsp").default_capabilities()
+        )
 
+        vim.lsp.enable("cmake")
+        vim.lsp.config("cmake", { capabilities = capabilities })
+        vim.lsp.enable("pylsp")
+        vim.lsp.config("pylsp", { capabilities = capabilities })
+        vim.lsp.enable("lua_ls")
+        vim.lsp.config("lua_ls", { capabilities = capabilities, filetypes = "lua" })
+        vim.lsp.enable("clangd")
+        vim.lsp.config("clangd",
+            {
+                capabilities = capabilities,
+                cmd = {
+                    "clangd",
+                    "--background-index",
+                    "--clang-tidy",
+                    "--suggest-missing-includes",
+                    "--completion-style=detailed",
+                },
+                filetypes = { "c", "cpp", "objc", "objcpp" },
+            }
+        )
 
-
-require("lspconfig").lua_ls.setup {
-    filetypes = { "lua" }
+    end
 }
-require("lspconfig").clangd.setup {
-    cmd = {
-        "clangd",
-        "--background-index",
-        "--clang-tidy",
-        "--suggest-missing-includes",
-        "--completion-style=detailed",
-    },
-    filetypes = { "c", "cpp", "objc", "objcpp" },
-}
-require("lspconfig").cmake.setup {}
-require("lspconfig").pylsp.setup {}
-
-
-vim.diagnostic.config({
-    virtual_text = false,
-    signs = true,
-    underline = true,
-    update_in_insert = false,
-    severity_sort = true
-})
-
-local warning_error_text_off = true
-
-function ToggleWarningError()
-    warning_error_text_off = not warning_error_text_off
-    vim.diagnostic.config({ virtual_text = not warning_error_text_off })
-end
-vim.api.nvim_set_keymap('n', '<leader>w', ':lua ToggleWarningError()<CR>', { noremap = true, silent = true })
-
-
-require("aerial").setup({
-    backends = { "treesitter", "lsp" },
-    layout = {
-        default_direction = "right",
-    },
-    attach_mode = "global",
-})
 

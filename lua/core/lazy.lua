@@ -12,61 +12,13 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     os.exit(1)
   end
 end
-
 vim.opt.rtp:prepend(lazypath)
 
 
-local plugins = {
-	{
-		"nvim-telescope/telescope.nvim",
-		dependencies = {
-            { "nvim-lua/plenary.nvim" }
-        },
-        lazy = true,
-        cmd = "Telescope"
-	},
-	{
-		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate",
-        lazy = true,
-        event = "BufReadPost"
-	},
-	{ "hrsh7th/nvim-cmp" },
-	{ "L3MON4D3/LuaSnip" },
-	{ "hrsh7th/cmp-nvim-lsp" },
-	{
-        "neovim/nvim-lspconfig",
-        lazy = true,
-        event = "BufReadPre",
+require("lazy").setup({
+    spec = {
+        { import = "plugins" }
     },
-	{
-        "williamboman/mason-lspconfig.nvim",
-        lazy = true,
-        event = "BufReadPre",
-    },
-	{ "preservim/nerdtree" },
-	{
-		"catppuccin/nvim",
-		name = "catppuccin"
-	},
-	{ "matze/vim-move" },
-	{ "stevearc/aerial.nvim" },
-	{ "tpope/vim-commentary" },
-	{ "windwp/nvim-autopairs" },
-	{ "rebelot/kanagawa.nvim" },
-	{ "ryanoasis/vim-devicons" },
-	{ "vim-airline/vim-airline" },
-	{
-        "williamboman/mason.nvim",
-        cmd = { "Mason", "MasonInstall" }
-    },
-	{ "saadparwaiz1/cmp_luasnip" },
-	{ "tiagofumo/vim-nerdtree-syntax-highlight" },
-}
-
-
-require("lazy").setup(plugins,
-{
     install = { colorscheme = { "habamax" } },
     checker = { enabled = true, notify = false },
     performance = {

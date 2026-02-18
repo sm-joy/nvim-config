@@ -25,13 +25,13 @@ vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.o.foldlevel = 99
 
 
-vim.cmd([[ autocmd StdinReadPre * let s:std_in=1]])
-vim.cmd([[ autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif]])
+--vim.cmd([[ autocmd StdinReadPre * let s:std_in=1]])
+--vim.cmd([[ autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif]])
 
 vim.cmd([[ autocmd BufRead,BufNewFile *.hpp set filetype=cpp ]])
 vim.cmd([[ autocmd BufRead,BufNewFile *.h   set filetype=c   ]])
 
-vim.g.loaded_netrw       = 1
-vim.g.loaded_netrwPlugin = 1
+--vim.g.loaded_netrw       = 1
+--vim.g.loaded_netrwPlugin = 1
 
 

@@ -1,11 +1,13 @@
-color = color or "kanagawa"
-vim.cmd.colorscheme(color)
-
-require("catppuccin").setup {
-    flavor = "frappe",
-    color_overrides = {
-        all = { text = "#ffffff" },
-        frappe = {
-        },
-    }
+return {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
+    lazy = false,
+    opts = {
+        flavor = "frappe",
+    },
+    config = function(_, opts)
+        require("catppuccin").setup(opts)
+        vim.cmd.colorscheme("catppuccin")
+    end,
 }
