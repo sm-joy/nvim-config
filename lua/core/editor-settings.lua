@@ -31,7 +31,7 @@ vim.o.foldlevel = 99
 vim.cmd([[ autocmd BufRead,BufNewFile *.hpp set filetype=cpp ]])
 vim.cmd([[ autocmd BufRead,BufNewFile *.h   set filetype=c   ]])
 
---vim.g.loaded_netrw       = 1
---vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_netrw       = 1
+vim.g.loaded_netrwPlugin = 1
 
 

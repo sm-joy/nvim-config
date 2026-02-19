@@ -19,18 +19,9 @@ vim.keymap.set('n', "<leader>tl",     function() vim.cmd("leftbelow  split term:
 vim.keymap.set('t', "<Esc>",          function() vim.cmd("<C-\\><C-n>")                                 end, opts)
 
 
-vim.keymap.set('n', "<leader>ex",
-    function()
-        vim.cmd("NERDTreeToggle")
-        vim.cmd("wincmd p")
-        vim.cmd('q')
-    end,
-    opts)
-
 vim.keymap.set('n', "<A-d>", function() vim.cmd("normal! yyp")  end, opts)
 vim.keymap.set('n', "<C-a>", function() vim.cmd("normal! ggVG") end, opts)
 
-vim.keymap.set('n', '<leader>sb', function() vim.cmd("AerialToggle") end, opts)
 
 vim.keymap.set('v', '<C-/>',  function() vim.cmd("gcc") end, opts)
 

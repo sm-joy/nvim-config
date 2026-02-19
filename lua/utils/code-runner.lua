@@ -18,21 +18,24 @@ function M.run_in_terminal(command)
     vim.cmd('startinsert')
 
     vim.api.nvim_create_autocmd(
-    "BufEnter",
-    {
-        buffer = 0,
-        command = 'startinsert'
-    })
+        "BufEnter",
+        {
+            buffer = 0,
+            command = 'startinsert'
+        }
+    )
 end
 
 function M.compile_and_run(lang, clean)
     local filename = vim.fn.expand('%')
-    local exe = vim.fn.expand("%:t:r")
     local compiler = lang == "c" and "gcc" or "g++"
-    local command = string.format("%s %s -o %s.exe && %s.exe", compiler, filename, exe, exe)
+    local target = vim.fn.expand("%:t:r") .. (vim.fn.has("win32") == 1 and ".exe" or "")
+    local run_prefix = vim.fn.has("win32") == 1 and ".\\" or "./"
+    local command = string.format("%s %s -o %s && %s%s", compiler, filename, target, run_prefix, target)
 
     if clean then
-        command = command .. string.format(" && del %s.exe", exe)
+        local remove_cmd = vim.fn.has("win32") == 1 and "del" or "rm"
+        command = command .. string.format(" && %s %s", remove_cmd, target)
     end
 
     M.run_in_terminal(command)
@@ -81,4 +84,3 @@ vim.api.nvim_create_autocmd(
 })
 
 return M
-

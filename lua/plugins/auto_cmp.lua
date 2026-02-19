@@ -17,7 +17,7 @@ return {
             },
             snippet = {
                 expand = function(args)
-                    vim.snippet.expand(args.body)
+                    require("LuaSnip").lsp_expand(args.body)
                 end,
             },
             mapping = cmp.mapping.preset.insert({
