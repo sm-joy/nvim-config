@@ -4,7 +4,7 @@ return {
         init = function()
             vim.g.move_key_modifier = "A"
             vim.g.move_key_modifier_visualmode = "A"
-            vim.g.move_map_keys = 0 -- disable default mappings
+            vim.g.move_map_keys = 0
 
             vim.keymap.set('n', '<A-Up>', '<Plug>MoveLineUp')
             vim.keymap.set('n', '<A-Down>', '<Plug>MoveLineDown')

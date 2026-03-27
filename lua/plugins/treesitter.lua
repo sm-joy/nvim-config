@@ -4,7 +4,7 @@ return {
   event = "BufReadPost",
   cmd = { "TSUpdate", "TSInstall", "TSLog", "TSUninstall" },
   opts = {
-    ensure_installed = { "c", "cpp", "lua", "markdown", "python", "markdown_inline", "html", "yaml", "toml", "xml", "json" },
+    ensure_installed = { "c", "cpp", "lua", "go", "markdown", "python", "markdown_inline", "html", "yaml", "toml", "xml", "json", "latex" },
     sync_install = false,
     auto_install = true,
     highlight = {

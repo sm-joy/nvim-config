@@ -1,2 +1,2 @@
-require("utils.code-runner")
+--require("utils.code-runner")
 require("utils.snippets")
